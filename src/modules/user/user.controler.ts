@@ -3,9 +3,9 @@ import { pool } from "../../config/db";
 import { userServices } from "./user.services";
 
 const createUser = async (req: Request, res: Response) => {
-    const { name, email } = req.body;
+    // const { name, email } = req.body;
     try {
-        const result = await userServices.createUser(name,email)
+        const result = await userServices.createUser(req.body)
         console.log(result.rows[0])
         res.status(201).json({
             success: true,
@@ -99,7 +99,7 @@ const updateUser =  async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
     // console.log(req.params.id)
     try {
-        const result = await userServices.deleteUser(req.params.id as string)
+        const result = await pool.query(`DELETE FROM users WHERE id = $1`, [req.params.id])
         console.log(result.rows)
 
 

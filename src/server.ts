@@ -4,6 +4,7 @@ import config from './config';
 import initDB, { pool } from './config/db';
 import logger from './middleware/logger';
 import { userRoutes } from './modules/user/user.routes';
+import { authRoutes } from './modules/auth/auth.routes';
 
 const app = express()
 const port = config.port
@@ -24,37 +25,10 @@ app.get('/',logger, (req: Request, res: Response) => {
 
 app.use("/users",userRoutes)
 
+app.use("/auth",authRoutes)
 
 
-// * delete the users data 
 
-app.delete("/users/:id", async (req: Request, res: Response) => {
-    // console.log(req.params.id)
-    try {
-        const result = await pool.query(`DELETE FROM users WHERE id = $1`, [req.params.id])
-        console.log(result.rows)
-
-
-        if (result.rowCount === 0) {
-            res.status(404).json({
-                success: false,
-                message: "User not found"
-            })
-        }
-        else {
-            res.status(200).json({
-                success: true,
-                message: "User deleted successfully",
-                data: result.rows[0]
-            })
-        }
-    } catch (err: any) {
-        res.status(500).json({
-            success: false,
-            message: err.message
-        })
-    }
-})
 
 
 
