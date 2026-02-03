@@ -1,12 +1,13 @@
 import { Request, Response, Router } from "express";
 import { pool } from "../../config/db";
 import { UserController } from "./user.controler";
+import auth from "../../middleware/auth";
 
 const router = Router()
 
 // Routes --> Controller(handle req,res) --> Service(logic)
 
-router.post("/",UserController.createUser)
+router.post("/",auth("admin","user"),UserController.createUser)
 
 router.get("/",UserController.getUser)
 
